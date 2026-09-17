@@ -12,10 +12,12 @@ import { connectionManagerActions } from '../../actions'
 import { ConnectionOptions, toMqttConnection } from '../../model/ConnectionOptions'
 import AdvancedConnectionSettings from './AdvancedConnectionSettings'
 import Certificates from './Certificates'
+import WillSettings from './WillSettings'
 
 const ConnectionSettingsAny = ConnectionSettings as any
 const AdvancedConnectionSettingsAny = AdvancedConnectionSettings as any
 const CertificatesAny = Certificates as any
+const WillSettingsAny = WillSettings as any
 
 interface Props {
   actions: any
@@ -24,6 +26,7 @@ interface Props {
   visible: boolean
   showAdvancedSettings: boolean
   showCertificateSettings: boolean
+  showWillSettings: boolean
 }
 
 class ConnectionSetup extends React.PureComponent<Props, {}> {
@@ -32,21 +35,26 @@ class ConnectionSetup extends React.PureComponent<Props, {}> {
   }
 
   private renderSettings() {
-    const { connection, showAdvancedSettings, showCertificateSettings } = this.props
+    const { connection, showAdvancedSettings, showCertificateSettings, showWillSettings } = this.props
     if (!connection) {
       return null
     }
 
+    const showConnectionSettings = !showAdvancedSettings && !showCertificateSettings && !showWillSettings
+
     return (
       <div>
-        <Collapse in={!showAdvancedSettings && !showCertificateSettings}>
-          <ConnectionSettingsAny connection={connection} />
+        <Collapse in={showConnectionSettings}>
+          <ConnectionSettingsAny active={showConnectionSettings} connection={connection} />
         </Collapse>
-        <Collapse in={showAdvancedSettings && !showCertificateSettings}>
+        <Collapse in={showAdvancedSettings && !showCertificateSettings && !showWillSettings}>
           <AdvancedConnectionSettingsAny connection={connection} />
         </Collapse>
-        <Collapse in={showCertificateSettings}>
+        <Collapse in={showCertificateSettings && !showWillSettings}>
           <CertificatesAny connection={connection} />
+        </Collapse>
+        <Collapse in={showWillSettings}>
+          <WillSettingsAny connection={connection} />
         </Collapse>
       </div>
     )
@@ -163,6 +171,7 @@ const mapStateToProps = (state: AppState) => ({
   visible: !state.connection.connected,
   showAdvancedSettings: state.connectionManager.showAdvancedSettings,
   showCertificateSettings: state.connectionManager.showCertificateSettings,
+  showWillSettings: state.connectionManager.showWillSettings,
   connection: state.connectionManager.selected
     ? state.connectionManager.connections[state.connectionManager.selected]
     : undefined,

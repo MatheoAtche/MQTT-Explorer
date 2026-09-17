@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useState, useCallback, memo } from 'react'
 import Add from '@mui/icons-material/Add'
 import Lock from '@mui/icons-material/Lock'
+import PowerOff from '@mui/icons-material/PowerOff'
 import Undo from '@mui/icons-material/Undo'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -38,7 +39,7 @@ const ConnectionSettings = memo((props: Props) => {
         [name]: event.target.value,
       })
     },
-    []
+    [props.connection.id, props.managerActions]
   )
 
   return (
@@ -83,23 +84,24 @@ const ConnectionSettings = memo((props: Props) => {
               onChange={handleChange('clientId')}
             />
           </Grid>
-          <Grid item xs={3} className={classes.gridPadding}>
-            <div>
-              <Tooltip title="Manage tls connection certificates" placement="top">
-                <Button
-                  variant="contained"
-                  className={classes.button}
-                  onClick={() => props.managerActions.toggleCertificateSettings()}
-                >
-                  <Lock /> Certificates
-                </Button>
-              </Tooltip>
-            </div>
-          </Grid>
-          <Grid item xs={2} className={classes.gridPadding}>
+          <Grid size={12} className={classes.footerActions}>
+            <Tooltip title="Configure Last Will and Testament" placement="top">
+              <Button
+                variant="contained"
+                onClick={() => props.managerActions.toggleWillSettings()}
+                data-testid="last-will-button"
+              >
+                <PowerOff /> Last Will
+              </Button>
+            </Tooltip>
+            <Tooltip title="Manage tls connection certificates" placement="top">
+              <Button variant="contained" onClick={() => props.managerActions.toggleCertificateSettings()}>
+                <Lock /> Certificates
+              </Button>
+            </Tooltip>
             <Button
               variant="contained"
-              className={classes.button}
+              className={classes.backButton}
               onClick={props.managerActions.toggleAdvancedSettings}
               data-testid="back-button"
             >
@@ -126,6 +128,17 @@ const styles = (theme: Theme) => ({
   button: {
     marginTop: theme.spacing(3),
     float: 'right' as const,
+  },
+  footerActions: {
+    boxSizing: 'border-box' as const,
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap' as const,
+    gap: theme.spacing(1.5),
+    padding: theme.spacing(0, 1.5),
+  },
+  backButton: {
+    marginLeft: 'auto',
   },
   qos: {
     marginTop: theme.spacing(1),

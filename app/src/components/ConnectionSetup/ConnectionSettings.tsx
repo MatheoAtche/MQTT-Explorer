@@ -18,6 +18,7 @@ import { useGlobalKeyEventHandler } from '../../effects/useGlobalKeyEventHandler
 import ConnectButton from './ConnectButton'
 
 interface Props {
+  active: boolean
   connection: ConnectionOptions
   classes: { [s: string]: string }
   actions: typeof connectionActions
@@ -60,7 +61,7 @@ function ConnectionSettings(props: Props) {
   }, [props.connection, props.connecting])
 
   useGlobalKeyEventHandler(KeyCodes.escape, props.actions.disconnect)
-  useGlobalKeyEventHandler(KeyCodes.enter, toggleConnect, [props.connecting])
+  useGlobalKeyEventHandler(KeyCodes.enter, toggleConnect, props.active)
 
   const handleClickShowPassword = useCallback(() => {
     setShowPassword(!showPassword)
