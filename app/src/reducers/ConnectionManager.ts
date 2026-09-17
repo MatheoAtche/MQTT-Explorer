@@ -93,6 +93,13 @@ export interface ToggleWillSettings {
   type: ActionTypes.CONNECTION_MANAGER_TOGGLE_WILL_SETTINGS
 }
 
+function toggleWillSettings(state: ConnectionManagerState): ConnectionManagerState {
+  return {
+    ...state,
+    showWillSettings: !state.showWillSettings,
+  }
+}
+
 export const connectionManagerReducer = createReducer(initialState, {
   CONNECTION_MANAGER_SET_CONNECTIONS: setConnections,
   CONNECTION_MANAGER_SELECT_CONNECTION: selectConnection,
@@ -134,13 +141,6 @@ function toggleCertificateSettings(
   return {
     ...state,
     showCertificateSettings: !state.showCertificateSettings,
-  }
-}
-
-function toggleWillSettings(state: ConnectionManagerState, action: ToggleWillSettings): ConnectionManagerState {
-  return {
-    ...state,
-    showWillSettings: !state.showWillSettings,
   }
 }
 

@@ -17,7 +17,6 @@ import WillSettings from './WillSettings'
 const ConnectionSettingsAny = ConnectionSettings as any
 const AdvancedConnectionSettingsAny = AdvancedConnectionSettings as any
 const CertificatesAny = Certificates as any
-const WillSettingsAny = WillSettings as any
 
 interface Props {
   actions: any
@@ -35,7 +34,8 @@ class ConnectionSetup extends React.PureComponent<Props, {}> {
   }
 
   private renderSettings() {
-    const { connection, showAdvancedSettings, showCertificateSettings, showWillSettings } = this.props
+    const { connection, showAdvancedSettings } = this.props
+    const { showCertificateSettings, showWillSettings } = this.props
     if (!connection) {
       return null
     }
@@ -54,7 +54,7 @@ class ConnectionSetup extends React.PureComponent<Props, {}> {
           <CertificatesAny connection={connection} />
         </Collapse>
         <Collapse in={showWillSettings}>
-          <WillSettingsAny connection={connection} />
+          <WillSettings connection={connection} />
         </Collapse>
       </div>
     )

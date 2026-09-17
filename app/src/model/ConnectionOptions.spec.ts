@@ -39,33 +39,32 @@ describe('ConnectionOptions', () => {
   })
 
   it('accepts a valid Last Will topic', () => {
-    expect(
-      getWillTopicError({
-        topic: 'clients/test/status',
-        payload: 'offline',
-        qos: 0,
-        retain: false,
-      })
-    ).to.equal(undefined)
+    const will = {
+      topic: 'clients/test/status',
+      payload: 'offline',
+      qos: 0 as const,
+      retain: false,
+    }
+
+    expect(getWillTopicError(will)).to.equal(undefined)
   })
 
   it('rejects empty and wildcard Last Will topics', () => {
-    expect(
-      getWillTopicError({
-        topic: '',
-        payload: '',
-        qos: 0,
-        retain: false,
-      })
-    ).to.equal('Last Will topic is required.')
-    expect(
-      getWillTopicError({
-        topic: 'clients/+/status',
-        payload: '',
-        qos: 0,
-        retain: false,
-      })
-    ).to.equal('Last Will topic cannot contain MQTT wildcards (+ or #).')
+    const emptyTopicWill = {
+      topic: '',
+      payload: '',
+      qos: 0 as const,
+      retain: false,
+    }
+    const wildcardTopicWill = {
+      topic: 'clients/+/status',
+      payload: '',
+      qos: 0 as const,
+      retain: false,
+    }
+
+    expect(getWillTopicError(emptyTopicWill)).to.equal('Last Will topic is required.')
+    expect(getWillTopicError(wildcardTopicWill)).to.equal('Last Will topic cannot contain MQTT wildcards (+ or #).')
   })
 
   it('rejects Last Will topics larger than the MQTT UTF-8 length limit', () => {

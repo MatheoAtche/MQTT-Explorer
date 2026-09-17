@@ -33,14 +33,11 @@ const ConnectionSettings = memo((props: Props) => {
     []
   )
 
-  const handleChange = useCallback(
-    (name: string) => (event: any) => {
-      props.managerActions.updateConnection(props.connection.id, {
-        [name]: event.target.value,
-      })
-    },
-    [props.connection.id, props.managerActions]
-  )
+  const handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.managerActions.updateConnection(props.connection.id, {
+      [name]: event.target.value,
+    })
+  }
 
   return (
     <div>
@@ -88,10 +85,11 @@ const ConnectionSettings = memo((props: Props) => {
             <Tooltip title="Configure Last Will and Testament" placement="top">
               <Button
                 variant="contained"
+                startIcon={<PowerOff />}
                 onClick={() => props.managerActions.toggleWillSettings()}
                 data-testid="last-will-button"
               >
-                <PowerOff /> Last Will
+                Last Will
               </Button>
             </Tooltip>
             <Tooltip title="Manage tls connection certificates" placement="top">
